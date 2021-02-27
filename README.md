@@ -18,7 +18,7 @@ openocd -f interface/stlink-v2-1.cfg -f target/stm32f3x.cfg
 
 ### STEPS TO FLASH CODE TO MICROCONTROLLER
 
-##### Build-it
+**Build-it**
 
 First step is to `build` binary crate. Microcontroller has different architecture than computer, we'll need to cross compile. Pass `--target` flag to **rustc** or **cargo** cross compile. The microcontroller in the `F3` has a `Cortex-M4F` processor in it.
 
@@ -42,7 +42,7 @@ Now, an executable is produced. This executable won't blink any leds. Verify pro
 cargo readobj --target thumbv7em-none-eabihf --bin led-roulette -- -file-headers
 ```
 
-##### Flash-it
+**Flash-it**
 
 Flashing is the process of moving our program into the microcontroller's (persistent) memory. Once flashed, the microcontroller will execute the flashed program every time it is powered on.
 
