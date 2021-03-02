@@ -103,3 +103,30 @@ Transfer rate: 6 KB/sec, 435 bytes/write.
 | info args                                                            | show the arguments of a function                                                                                                                       |
 | backtrace (or bt)                                                    | Regardless of where your program may have stopped you can always look at the output of the backtrace command (bt for short) to learn how it got there: |
 | finish                                                               | return to main function                                                                                                                                |
+
+`Trick`
+
+> Our GDB sessions always involve entering the same commands at the beginning. We can use a .gdb file to execute some commands right after GDB is started. This way you can save yourself the effort of having to enter them manually on each GDB session.
+
+> Place this openocd.gdb file in the root of the Cargo project, right next to the Cargo.toml:
+
+```javascript
+// openocd.gdb
+target remote :3333
+load
+break main
+continue
+```
+
+> Then modify the second line of the .cargo/config file:
+
+```javascript
+// .cargo/config
+[target.thumbv7em-none-eabihf]
+runner = "arm-none-eabi-gdb -q -x openocd.gdb" # <-
+rustflags = [
+  "-C", "link-arg=-Tlink.x",
+]
+```
+
+After that just run: `cargo run --target thumbv7em-none-eabihf`
