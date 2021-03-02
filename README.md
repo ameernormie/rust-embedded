@@ -160,3 +160,28 @@ Continuing.
 This combo is handy when you, by mistake, skipped over a part of the program that you were interested in inspecting. You can easily roll back the state of your program back to its very beginning.
 
 You can end debug session with the `quit` command.
+
+We can use the `next` command instead of `step`. The difference is that the `next` command will `step` over function calls instead of going inside them.
+
+A more explicit way to show the arguments of a function is to use the `info args` command:
+
+Regardless of where your program may have stopped you can always look at the output of the `backtrace` command (bt for short) to learn how it got there:
+
+| Commands                                                             | Description                                                                                                                                            |
+| -------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| cargo build --target thumbv7em-none-eabihf                           | cross compile the code                                                                                                                                 |
+| arm-none-eabi-gdb -q target/thumbv7em-none-eabihf/debug/led-roulette | open `gdb`                                                                                                                                             |
+| load                                                                 | Flash the code to microcontroller                                                                                                                      |
+| break main                                                           | Add a breakpoint at `main`                                                                                                                             |
+| continue                                                             | run the program freely until breakpoint is reached                                                                                                     |
+| layout src                                                           | For nicer debugging experience,GDB's Text User Interface (TUI)                                                                                         |
+| tui disable                                                          | Exit tui mode                                                                                                                                          |
+| print <variable>                                                     | find out the value of variable while debugging                                                                                                         |
+| info locals                                                          | print all local variables                                                                                                                              |
+| monitor reset halt && continue                                       | Roll back debugging to go to start of breakpoint                                                                                                       |
+| step                                                                 | `step` command will go inside function them.                                                                                                           |
+| next                                                                 | `next` command will step over function calls instead of going inside them.                                                                             |
+| quit                                                                 | quit from `gdb`                                                                                                                                        |
+| info args                                                            | show the arguments of a function                                                                                                                       |
+| backtrace (or bt)                                                    | Regardless of where your program may have stopped you can always look at the output of the backtrace command (bt for short) to learn how it got there: |
+| finish                                                               | return to main function                                                                                                                                |
