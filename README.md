@@ -130,3 +130,28 @@ rustflags = [
 ```
 
 After that just run: `cargo run --target thumbv7em-none-eabihf`
+
+### ITM (Instrumentation Trace Macrocell)
+
+The `iprintln` macro will format messages and output them to the microcontroller's ITM. ITM stands for Instrumentation Trace Macrocell and it's a communication protocol on top of SWD (Serial Wire Debug) which can be used to send messages from the microcontroller to the debugging host. This communication is only one way: the debugging host can't send data to the microcontroller.
+
+OpenOCD, which is managing the debug session, can receive data sent through this ITM channel and redirect it to a file.
+The ITM protocol works with frames (you can think of them as Ethernet frames). Each frame has a header and a variable length payload. OpenOCD will receive these frames and write them directly to a file without parsing them. So, if the microntroller sends the string "Hello, world!" using the `iprintln` macro, OpenOCD's output file won't exactly contain that string.
+To retrieve the original string, OpenOCD's output file will have to be parsed. We'll use the itmdump program to perform the parsing as new data arrives.
+
+```console
+$ # itmdump terminal
+
+$ cd /tmp && touch itm.txt
+
+$ # This command will block as itmdump is now watching the itm.txt file. Leave this terminal open.
+$ itmdump -F -f itm.txt
+```
+
+```console
+(gdb) # globally enable the ITM and redirect all output to itm.txt
+(gdb) monitor tpiu config internal itm.txt uart off 8000000
+
+(gdb) # enable the ITM port 0
+(gdb) monitor itm port 0 on
+```
